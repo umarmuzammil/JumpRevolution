@@ -5,15 +5,19 @@ using UnityEngine.UI;
 
 public class BlocksAI : MonoBehaviour {
 
+    float halfScreenSize;
+
     public Text countDown;
     int countDownLength = 3;
     float time = 0;
+
+
 
     bool startGame = false;
 
     void Start()
     {
-        
+        halfScreenSize = Camera.main.orthographicSize * Camera.main.aspect;     
     }
 
     void StartCountDown()
@@ -54,10 +58,11 @@ public class BlocksAI : MonoBehaviour {
 
     }
     void InstantiateBlocks()
-    {
+    {   
+
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3(0, -0.5F, 0);
-        cube.transform.localScale = new Vector3(2, 1, 1);
+        cube.transform.position = new Vector3(halfScreenSize+3.5f, -0.5F, 0);
+        cube.transform.localScale = new Vector3(2, 0.5f, 0.5f);
 
         cube.transform.SetParent(transform);
 

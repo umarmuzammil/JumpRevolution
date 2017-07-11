@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class BlocksMovement : MonoBehaviour {
 
-    int speed = 5; 
+    float halfScreenSize;
 
+    public int speed = 5;
 
-    void Move(string direction)
+    void Start()
+    {
+        halfScreenSize = Camera.main.orthographicSize * Camera.main.aspect;
+        Debug.Log(halfScreenSize);
+    }
+
+    void MoveIt(string direction)
     {
         Vector3 velocity = Vector3.left * speed * Time.deltaTime;
 
@@ -17,8 +24,15 @@ public class BlocksMovement : MonoBehaviour {
         }
     }
 
+    void DestroyIt()
+    {
+        if (transform.position.x <= -halfScreenSize)
+            Destroy(transform.gameObject);
+    }
+
     void Update () {
-        Move("left");
+        MoveIt("left");
+        DestroyIt();
 
     }
 }
