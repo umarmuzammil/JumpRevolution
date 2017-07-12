@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour {
 
@@ -35,12 +36,18 @@ public class PlayerController : MonoBehaviour {
                 if (hit.collider.tag == "cube")
                 {
                     charAnimator.SetFloat("jump", 1f);
-                    charRigidbody.AddForce(Vector3.up * 4.5f, ForceMode.Impulse);
+                    //charRigidbody.AddForce(Vector3.up * 4.5f, ForceMode.Impulse);
+                    Vector3 newPos = hit.point + new Vector3(0, 0.25f, 0);
+
+                    transform.DOMove(newPos, 2f).SetEase(Ease.InOutQuad).OnComplete(Arrived);
                 }                
-            }
+            }            
+        }
+    }
 
 
-        } 
-
+    void Arrived()
+    {
+        charAnimator.SetFloat("jump", 0f);
     }
 }
