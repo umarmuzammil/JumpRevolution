@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 public class SpawnBlocks : MonoBehaviour {
 
-	int minDelay = 1; 
-	int maxDelay = 3; 
+
+    //Delay min max Values
+    int minDelay = 1;
+    int maxDelay = 3;
 
 
-	public GameObject baseBlock;
+    public GameObject baseBlock;
 
     float time = 0;
 	bool begin = false;
@@ -17,7 +19,9 @@ public class SpawnBlocks : MonoBehaviour {
 	void GameStarted()
 	{
 		begin =  true;
-	}
+        //Add MoveScript to Existing Block
+        baseBlock.AddComponent<MoveBlocks>();
+    }
 
     void Start()
     {
@@ -28,11 +32,8 @@ public class SpawnBlocks : MonoBehaviour {
     void Update()
     {
      
-
 		if (begin)
         {
-			if(baseBlock)
-				baseBlock.AddComponent<MoveBlocks> ();
             if (time == 0)
             {        
                 InstantiateBlocks();   
@@ -43,30 +44,30 @@ public class SpawnBlocks : MonoBehaviour {
 			if (time > delay)
                 time = 0;
         }
-
-
-
     }
     void InstantiateBlocks()
     {
-		//Position Parameters
-		int minPosY = 0;
-		int maxPosy = 0;
-
-		int minPosZ = 0;
-		int maxPosZ = 0;
+        //Position Parameters
+        float minPosY = 0;
+        float maxPosY = 2.5f;
 
 		//Scale Parameters
 
-		int minScaleX = 0;
-		int maxScaleX = 0;
+		float minScaleX = 1f;
+		float maxScaleX = 3f;
 
-		int minScaleY = 0;
-		int maxScaleY = 0;
+		float minScaleZ = 0.5f;
+		float maxScaleZ = 1f;
+
+
+        float posY = Random.Range(minPosY, maxPosY);
+        float scaleX = Random.Range(minScaleX, maxScaleX);
+        float scaleZ = Random.Range(minScaleZ, maxScaleZ);
+
 
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		cube.transform.position = new Vector3(GameController.halfScreenSize+3.5f, -0.5F, 0);
-        cube.transform.localScale = new Vector3(2, 0.5f, 1f);
+		cube.transform.position = new Vector3(GameController.halfScreenSize+3.5f, posY, 0);
+        cube.transform.localScale = new Vector3(scaleX, 0.5f, scaleZ);
 
         cube.transform.SetParent(transform);
 
