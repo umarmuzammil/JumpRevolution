@@ -72,6 +72,7 @@ public class SpawnBlocks : MonoBehaviour {
         cube.transform.SetParent(transform);
 
 		cube.AddComponent<MoveBlocks>();
+        cube.tag = "cube";
         //cube.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
  
