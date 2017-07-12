@@ -2,17 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlocksMovement : MonoBehaviour {
-
-    float halfScreenSize;
+public class MoveBlocks : MonoBehaviour {
 
     public int speed = 5;
-
-    void Start()
-    {
-        halfScreenSize = Camera.main.orthographicSize * Camera.main.aspect;
-        Debug.Log(halfScreenSize);
-    }
 
     void MoveIt(string direction)
     {
@@ -26,13 +18,16 @@ public class BlocksMovement : MonoBehaviour {
 
     void DestroyIt()
     {
-        if (transform.position.x <= -halfScreenSize)
+        if (transform.position.x <= -GameController.halfScreenSize)
             Destroy(transform.gameObject);
     }
 
     void Update () {
+		
         MoveIt("left");
         DestroyIt();
+        
+   
 
     }
 }
