@@ -8,7 +8,6 @@ public class PlayerController : MonoBehaviour {
 
     //bool begin = false;
     Animator charAnimator;
-    Rigidbody charRigidbody;
 
     void GameStarted()
     {
@@ -21,7 +20,6 @@ public class PlayerController : MonoBehaviour {
         GameController.gameStarted += GameStarted;
 
         charAnimator = GetComponent<Animator>();
-        charRigidbody = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -36,10 +34,8 @@ public class PlayerController : MonoBehaviour {
                 if (hit.collider.tag == "cube")
                 {
                     charAnimator.SetFloat("jump", 1f);
-                    //charRigidbody.AddForce(Vector3.up * 4.5f, ForceMode.Impulse);
-                    Vector3 newPos = hit.point + new Vector3(0, 0.25f, 0);
-
-                    transform.DOMove(newPos, 2f).SetEase(Ease.InOutQuad).OnComplete(Arrived);
+					Vector3 newPos = hit.point + new Vector3(0, 0.25f, 0);
+					transform.DOJump(newPos,1f, 1,0.3f, false).SetEase(Ease.InOutQuad).OnComplete(Arrived);
                 }                
             }            
         }
