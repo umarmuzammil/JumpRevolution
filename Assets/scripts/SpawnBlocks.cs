@@ -55,18 +55,18 @@ public class SpawnBlocks : MonoBehaviour {
 		float minScaleX = 1f;
 		float maxScaleX = 3f;
 
-		float minScaleZ = 0.5f;
-		float maxScaleZ = 1f;
+		//float minScaleZ = 0.5f;
+		//float maxScaleZ = 1f;
 
 
 		float posY = Random.Range(minPosY, maxPosY);
         float scaleX = Random.Range(minScaleX, maxScaleX);
-        float scaleZ = Random.Range(minScaleZ, maxScaleZ);
+       // float scaleZ = Random.Range(minScaleZ, maxScaleZ);
 
 
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		cube.transform.position = new Vector3(GameController.halfScreenSize+3.5f+(scaleX/2+2f), posY, 0);
-        cube.transform.localScale = new Vector3(scaleX, 0.5f, scaleZ);
+        cube.transform.localScale = new Vector3(scaleX, 0.5f, 1);
 
 		Color blockcolor = new Color (Random.value, Random.value, Random.value, 1f);
 

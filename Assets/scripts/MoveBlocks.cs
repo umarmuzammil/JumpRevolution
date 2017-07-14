@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class MoveBlocks : MonoBehaviour {
 
-    public int speed = 3;
+    public static int speed = 5;
+
+
+    void start()
+    {
+        
+    }
 
     void Update () {
 
