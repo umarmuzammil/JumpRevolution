@@ -65,8 +65,8 @@ public class PlayerController : MonoBehaviour
                     {
                         activeBlock = hit.transform.gameObject;
                         charAnimator.SetFloat("jump", 1f);
-                        Vector3 newPos = new Vector3(hit.point.x - (MoveBlocks.speed * jumpspeed), hit.point.y + 0.25f, 0);
-                        transform.DOJump(newPos, 1f, 1, jumpspeed, false).SetEase(Ease.InOutQuad).OnComplete(Arrived);
+                        Vector3 newPos = new Vector3(hit.point.x - (MoveBlocks.speed * jumpspeed), hit.point.y + 0.1f, 0);
+                        transform.DOJump(newPos, 1f, 1, jumpspeed, false).SetEase(Ease.InOutQuint).OnComplete(Arrived);
                     }
                 }
             }
