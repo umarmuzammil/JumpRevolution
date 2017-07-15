@@ -7,13 +7,15 @@ public class SpawnBlocks : MonoBehaviour {
 
 
     //Delay min max Values
-    int minDelay = 1;
-    int maxDelay = 2;
+    private int minDelay = 1;
+    private int maxDelay = 2;
+    private float time = 0;
+    private bool begin = false;
+    private bool paused = false;
 
     public GameObject baseBlock;
 	public Material blockMaterial;
-    float time = 0;
-	bool begin = false;
+    
 
 	void GameStarted()
 	{
@@ -22,26 +24,34 @@ public class SpawnBlocks : MonoBehaviour {
         baseBlock.AddComponent<MoveBlocks>();
     }
 
+    void Pause(bool state)
+    {
+        paused = state;
+    }
+
     void Start()
     {
 		GameController.gameStarted += GameStarted;
+        GameController.gamePaused += Pause;
     }
 
 
     void Update()
     {
-     
-		if (begin)
+        if (!paused)
         {
-            if (time == 0)
-            {        
-                InstantiateBlocks();   
-            }
-            time += Time.deltaTime;
+            if (begin)
+            {
+                if (time == 0)
+                {
+                    InstantiateBlocks();
+                }
+                time += Time.deltaTime;
 
-			int delay = Random.Range (minDelay, maxDelay);
-			if (time > delay)
-                time = 0;
+                int delay = Random.Range(minDelay, maxDelay);
+                if (time > delay)
+                    time = 0;
+            }
         }
     }
     void InstantiateBlocks()

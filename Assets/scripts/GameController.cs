@@ -16,16 +16,28 @@ public class GameController : MonoBehaviour {
     float time = 0;
 
     bool startGame = false;
+    bool pauseGame = false;
 
 
     //Gamestarted Event 
     public delegate void GameStart();
     public static event GameStart gameStarted;
 
+
+    public delegate void Pause(bool state);
+    public static event Pause gamePaused;
+
     void Start()
     {
 		halfScreenSize = Camera.main.orthographicSize * Camera.main.aspect;
 
+    }
+
+    public void PauseGame()
+    {
+        pauseGame = !pauseGame;
+        if (gamePaused != null)
+            gamePaused(pauseGame);
     }
 
     void StartCountDown()
@@ -37,6 +49,7 @@ public class GameController : MonoBehaviour {
         {
             countDown.gameObject.SetActive(false);
             startGame = true;
+
             if (gameStarted != null)
                 gameStarted();
         }

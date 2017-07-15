@@ -5,19 +5,29 @@ using UnityEngine;
 public class MoveBlocks : MonoBehaviour {
 
     public static int speed = 5;
+    private bool paused = false;
 
-
-    void start()
+    void Pause(bool state)
     {
-        
+        paused = state;
+    }
+
+    void Start()
+    {
+        GameController.gamePaused += Pause;
     }
 
     void Update () {
 
-        Vector3 velocity = Vector3.left * speed * Time.deltaTime;
-        transform.Translate(velocity);
+        if (!paused)
+        {
+            Vector3 velocity = Vector3.left * speed * Time.deltaTime;
+            transform.Translate(velocity);
 
-        if (transform.position.x <= -(GameController.halfScreenSize+5))
-            Destroy(transform.gameObject);
+            if (transform.position.x <= -(GameController.halfScreenSize + 5))
+                Destroy(transform.gameObject);
+        }
+
+        
     }
 }

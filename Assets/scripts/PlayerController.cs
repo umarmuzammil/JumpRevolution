@@ -7,11 +7,20 @@ public class PlayerController : MonoBehaviour
 {
 
 
-    bool begin = false;
-    public GameObject firstBlock;
+    private bool begin = false;
+    private bool paused = false;
+    private GameObject activeBlock;
+    private Animator charAnimator;
 
-    Animator charAnimator;
-    GameObject activeBlock;
+    
+    public GameObject firstBlock;
+    [Range(0.1f,1)]
+    public float jumpspeed = 0.3f;
+
+    void Pause(bool state)
+    {
+        paused = state;
+    }
 
     void GameStarted()
     {
@@ -21,35 +30,44 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        //Game Events
+
         GameController.gameStarted += GameStarted;
+        GameController.gamePaused += Pause;
+
+
         charAnimator = GetComponent<Animator>();
     }
 
     void Update()
     {
 
-        if (begin)
-        {
-            if (transform.position.x > -2.25f)
-            {
-                Vector3 activeposition = new Vector3(transform.position.x - MoveBlocks.speed * Time.deltaTime, transform.position.y, transform.position.z);
-                transform.position = activeposition;
-            }  
-        
-        }
 
-        if (Input.GetMouseButtonDown(0))
+        if (!paused)
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 100))
+            if (begin)
             {
-                if (hit.collider.tag == "cube")
+                if (transform.position.x > -2.25f)
                 {
-                    activeBlock = hit.transform.gameObject;
-                    charAnimator.SetFloat("jump", 1f);
-                    Vector3 newPos = new Vector3(hit.point.x, hit.point.y+0.25f, 0);
-                    transform.DOJump(newPos, 1f, 1, 0.3f, false).SetEase(Ease.InOutQuad).OnComplete(Arrived);
+                    Vector3 activeposition = new Vector3(transform.position.x - MoveBlocks.speed * Time.deltaTime, transform.position.y, transform.position.z);
+                    transform.position = activeposition;
+                }
+
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, 100))
+                {
+                    if (hit.collider.tag == "cube")
+                    {
+                        activeBlock = hit.transform.gameObject;
+                        charAnimator.SetFloat("jump", 1f);
+                        Vector3 newPos = new Vector3(hit.point.x - (MoveBlocks.speed * jumpspeed), hit.point.y + 0.25f, 0);
+                        transform.DOJump(newPos, 1f, 1, jumpspeed, false).SetEase(Ease.InOutQuad).OnComplete(Arrived);
+                    }
                 }
             }
         }
@@ -57,7 +75,7 @@ public class PlayerController : MonoBehaviour
 
 
     void Arrived()
-    {
+    {                
         charAnimator.SetFloat("jump", 0f);
     }
 }
