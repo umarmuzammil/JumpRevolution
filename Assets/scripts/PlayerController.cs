@@ -10,11 +10,13 @@ public class PlayerController : MonoBehaviour
     private bool begin = false;
     private bool paused = false;
     private GameObject activeBlock;
+	private GameObject previousBlock;
     private Animator charAnimator;
 
-	SoundController sound;
+	Vector3 playerInitialPos = new Vector3 (-1f,-0.25f,0f);
 
-    public GameObject firstBlock;
+	SoundController soundController;
+	GameController gameController;
     [Range(0.1f,1)]
     public float jumpspeed = 0.3f;
 
@@ -24,26 +26,38 @@ public class PlayerController : MonoBehaviour
     }
 
     void GameStarted()
-    {
-        activeBlock = firstBlock;
+    {        
         begin = true;
     }
 
     void Start()
     {
+		
+		previousBlock = activeBlock = GameObject.FindGameObjectWithTag ("cube");
+
+
         //Game Events
-		sound = FindObjectOfType<SoundController>();
+		soundController = FindObjectOfType<SoundController>();
+		gameController = FindObjectOfType<GameController>();
+
+
         GameController.gameStarted += GameStarted;
         GameController.gamePaused += Pause;
+		GameController.reset += Reset;
 
 
         charAnimator = GetComponent<Animator>();
     }
 
+	void Reset()
+	{
+		previousBlock = activeBlock = GameObject.FindGameObjectWithTag ("cube");
+		transform.position = playerInitialPos;
+		Pause (false);
+	}
+
     void Update()
     {
-
-
         if (!paused)
         {
             if (begin)
@@ -64,17 +78,30 @@ public class PlayerController : MonoBehaviour
                 {
                     if (hit.collider.tag == "cube")
                     {
-                        activeBlock = hit.transform.gameObject;
-                        charAnimator.SetFloat("jump", 1f);
-                        Vector3 newPos = new Vector3(hit.point.x - (MoveBlocks.speed * jumpspeed), hit.point.y + 0.1f, 0);
-						sound.Jump ();
-						transform.DOJump(newPos, 1f, 1, jumpspeed, false).SetEase(Ease.InOutQuint).OnComplete(Arrived);
+						previousBlock = activeBlock;
+                        activeBlock = hit.transform.gameObject;	
+
+						if (!(activeBlock == previousBlock)) {
+							charAnimator.SetFloat ("jump", 1f);
+							Vector3 newPos = new Vector3 (hit.point.x - (MoveBlocks.speed * jumpspeed), hit.point.y + 0.1f, 0);
+							soundController.Jumped ();
+							transform.DOJump (newPos, 1f, 1, jumpspeed, false).SetEase (Ease.InOutQuint).OnComplete (Arrived);
+						}
 
                     }
                 }
             }
         }
     }
+
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.tag == "Respawn") {
+			gameController.GameisOver ();
+			soundController.Crashed ();
+		}
+	}
 
 
     void Arrived()

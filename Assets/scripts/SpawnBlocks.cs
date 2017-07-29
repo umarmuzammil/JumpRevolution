@@ -13,14 +13,18 @@ public class SpawnBlocks : MonoBehaviour {
     private bool begin = false;
     private bool paused = false;
 
-    public GameObject baseBlock;
+    public GameObject baseBlockPrefab;
+	GameObject baseBlock;
+	List<GameObject> spawedBlocks = new List<GameObject>();
+
+
 	public Material blockMaterial;
     
 
 	void GameStarted()
 	{
 		begin =  true;
-        //Add MoveScript to Existing Block
+		Pause (false);
         baseBlock.AddComponent<MoveBlocks>();
     }
 
@@ -31,10 +35,23 @@ public class SpawnBlocks : MonoBehaviour {
 
     void Start()
     {
+		
+		baseBlock = Instantiate (baseBlockPrefab, transform);
 		GameController.gameStarted += GameStarted;
         GameController.gamePaused += Pause;
+		GameController.reset += Reset;
+
     }
 
+	void Reset()
+	{
+		if (spawedBlocks.Count > 0) {		
+			for (int i = 0; i < spawedBlocks.Count; i++)
+				Destroy (spawedBlocks [i]);
+		}
+		spawedBlocks.Add(baseBlock = Instantiate (baseBlockPrefab, transform));
+		time = 0;
+	}
 
     void Update()
     {
@@ -81,14 +98,10 @@ public class SpawnBlocks : MonoBehaviour {
 		Color blockcolor = new Color (Random.value, Random.value, Random.value, 1f);
 
 		cube.GetComponent<MeshRenderer> ().material.color = blockcolor;
-
-
-
         cube.transform.SetParent(transform);
-
 		cube.AddComponent<MoveBlocks>();
         cube.tag = "cube";
-        //cube.transform.rotation = Quaternion.Euler(0, 0, 0);
+		spawedBlocks.Add (cube);
     }
  
 }

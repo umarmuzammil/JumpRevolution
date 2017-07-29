@@ -5,42 +5,72 @@ using UnityEngine;
 //[RequireComponent(typeof(AudioSource))]
 public class SoundController : MonoBehaviour {
 
-    public AudioSource background;
-    public AudioSource gameplay;
-    public AudioSource UI;
+    public AudioSource gameMusicSource;
+	public AudioSource uiMusicSource;
+    public AudioSource playerSource;
+	public AudioSource buttonsSource;
+
 
     [Header("Gameplay")]
-    public AudioClip backgroundMusic1;
-    public AudioClip backgroundMusic2;
-    public AudioClip backgroundMusic3;
+    public AudioClip music_a;
+    public AudioClip music_b;
+    public AudioClip music_c;
 
     public AudioClip jump, fall;
+
     [Header("UI")]
-    public AudioClip play;
-    public AudioClip pause, restart;
-
-
-	bool playBackgroundMusic = true;
+	public AudioClip music;
+    public AudioClip buttons;
 
 	void Start()
 	{
-		Music ();
+		GameController.gameStarted += GameStarted;
+
+		UIMusic (true);
 	}
 
-    public void Music()
+	public void UIMusic(bool play = true)
+	{
+		if (play) {		
+			uiMusicSource.clip = music;
+			uiMusicSource.Play();
+		} else
+			uiMusicSource.Stop ();
+	}
+
+	void GameStarted()
+	{		
+		UIMusic (false);
+		BGMusic (true);
+	}
+
+
+	public void BGMusic(bool play)
     {
-		if (playBackgroundMusic) {
-			background.clip = backgroundMusic1;
-			background.Play ();
-		}
-		
+		if (play) {
+			gameMusicSource.clip = music_a;
+			gameMusicSource.Play ();
+		} else
+			gameMusicSource.Stop ();		
     }
 
 
-    public void Jump()
+	public void BtnPressed()
+	{
+		buttonsSource.clip = buttons;
+		buttonsSource.Play ();
+	}
+
+	public void Crashed()
+	{
+		playerSource.clip = fall;
+		playerSource.Play ();
+	}
+
+    public void Jumped()
     {
-		gameplay.clip = jump;
-		gameplay.Play ();
+		playerSource.clip = jump;
+		playerSource.Play ();
     }
         
     

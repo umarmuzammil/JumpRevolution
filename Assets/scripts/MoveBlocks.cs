@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveBlocks : MonoBehaviour {
 
-    public static int speed = 5;
+    public static int speed = 3;
     private bool paused = false;
 
     void Pause(bool state)
@@ -13,7 +13,7 @@ public class MoveBlocks : MonoBehaviour {
     }
 
     void Start()
-    {
+    {		
         GameController.gamePaused += Pause;
     }
 
