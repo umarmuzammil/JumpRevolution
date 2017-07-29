@@ -13,9 +13,12 @@ public class GameController : MonoBehaviour {
 
     public Text countDown;
     public int countDownLength = 3;
+    public Button playBtn;
+
     float time = 0;
 
-    bool startGame = false;
+    bool countDownFinished = false;
+    bool startGame = false; 
     bool pauseGame = false;
 
 
@@ -29,8 +32,14 @@ public class GameController : MonoBehaviour {
 
     void Start()
     {
-		halfScreenSize = Camera.main.orthographicSize * Camera.main.aspect;
+		halfScreenSize = Camera.main.orthographicSize * Camera.main.aspect;        
+    }
 
+    public void Play()
+    {
+        playBtn.gameObject.SetActive(false);
+        pauseGame = false;
+        startGame = true;
     }
 
     public void PauseGame()
@@ -48,17 +57,16 @@ public class GameController : MonoBehaviour {
         if (time > countDownLength)
         {
             countDown.gameObject.SetActive(false);
-            startGame = true;
+            countDownFinished = true;
 
             if (gameStarted != null)
                 gameStarted();
         }
     }
 
-    // Update is called once per frame
-    void Update () {
-
-        if (!startGame)
+    void Update()
+    {
+        if (startGame && !countDownFinished)
             StartCountDown();
     }
 }

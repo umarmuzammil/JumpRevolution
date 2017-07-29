@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour
     private GameObject activeBlock;
     private Animator charAnimator;
 
-    
+	SoundController sound;
+
     public GameObject firstBlock;
     [Range(0.1f,1)]
     public float jumpspeed = 0.3f;
@@ -31,7 +32,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //Game Events
-
+		sound = FindObjectOfType<SoundController>();
         GameController.gameStarted += GameStarted;
         GameController.gamePaused += Pause;
 
@@ -66,7 +67,9 @@ public class PlayerController : MonoBehaviour
                         activeBlock = hit.transform.gameObject;
                         charAnimator.SetFloat("jump", 1f);
                         Vector3 newPos = new Vector3(hit.point.x - (MoveBlocks.speed * jumpspeed), hit.point.y + 0.1f, 0);
-                        transform.DOJump(newPos, 1f, 1, jumpspeed, false).SetEase(Ease.InOutQuint).OnComplete(Arrived);
+						sound.Jump ();
+						transform.DOJump(newPos, 1f, 1, jumpspeed, false).SetEase(Ease.InOutQuint).OnComplete(Arrived);
+
                     }
                 }
             }
