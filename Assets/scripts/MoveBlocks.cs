@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MoveBlocks : MonoBehaviour {
 
-    public static int speed = 3;
     private bool paused = false;
+	GameController gameController;
 
     void Pause(bool state)
     {
@@ -14,6 +14,7 @@ public class MoveBlocks : MonoBehaviour {
 
     void Start()
     {		
+		gameController = FindObjectOfType<GameController> ();
         GameController.gamePaused += Pause;
     }
 
@@ -21,7 +22,7 @@ public class MoveBlocks : MonoBehaviour {
 
         if (!paused)
         {
-            Vector3 velocity = Vector3.left * speed * Time.deltaTime;
+			Vector3 velocity = Vector3.left * gameController.moveSpeed * Time.deltaTime;
             transform.Translate(velocity);
 
             if (transform.position.x <= -(GameController.halfScreenSize + 5))

@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour {
 
 
 	public static float halfScreenSize;
-
+	public float moveSpeed = 3;
     //Game Starting Timer    Variables
 	public Button pausebtn;
     public Text countDowntxt;

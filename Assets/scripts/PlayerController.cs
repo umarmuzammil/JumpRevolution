@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (transform.position.x > -2.25f)
                 {
-                    Vector3 activeposition = new Vector3(transform.position.x - MoveBlocks.speed * Time.deltaTime, transform.position.y, transform.position.z);
+					Vector3 activeposition = new Vector3(transform.position.x - gameController.moveSpeed * Time.deltaTime, transform.position.y, transform.position.z);
                     transform.position = activeposition;
                 }
 
@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
 						if (!(activeBlock == previousBlock)) {
 							charAnimator.SetFloat ("jump", 1f);
-							Vector3 newPos = new Vector3 (hit.point.x - (MoveBlocks.speed * jumpspeed), hit.point.y + 0.1f, 0);
+							Vector3 newPos = new Vector3 (activeBlock.transform.position.x - (gameController.moveSpeed * jumpspeed), hit.point.y + 0.1f, 0);
 							soundController.Jumped ();
 							transform.DOJump (newPos, 1f, 1, jumpspeed, false).SetEase (Ease.InOutQuint).OnComplete (Arrived);
 						}
