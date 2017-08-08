@@ -1302,6 +1302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddace2d310611ea4b930b972e9870505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 3
   pausebtn: {fileID: 837014981}
   countDowntxt: {fileID: 1295865526}
   countDownLength: 3
