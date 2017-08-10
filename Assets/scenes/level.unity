@@ -797,6 +797,7 @@ MonoBehaviour:
   baseBlockPrefab: {fileID: 1083178519366058, guid: a6f30c6a85dcf50489444b6098c62893,
     type: 2}
   blockMaterial: {fileID: 2100000, guid: 58b0ebe1cfc928b49af52beed6e8d1f2, type: 2}
+  clickableColor: {r: 1, g: 0.18382353, b: 0.18382353, a: 0}
 --- !u!4 &853929980
 Transform:
   m_ObjectHideFlags: 0
@@ -1303,6 +1304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
+  DifficultyIncreaseValue: 1.2
   pausebtn: {fileID: 837014981}
   countDowntxt: {fileID: 1295865526}
   countDownLength: 3

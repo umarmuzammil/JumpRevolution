@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour {
 
 	public static float halfScreenSize;
 	public float moveSpeed = 3;
+	public float DifficultyIncreaseValue = 1.2f;
     //Game Starting Timer    Variables
 	public Button pausebtn;
     public Text countDowntxt;
@@ -18,6 +19,7 @@ public class GameController : MonoBehaviour {
 	SoundController sound;
 
     float time = 0;
+	int difficulty = 0; 
 
 	bool countDownFinished,startGame,pauseGame = false;
 
@@ -32,11 +34,12 @@ public class GameController : MonoBehaviour {
     void Start()
     {
 		sound = FindObjectOfType<SoundController>();
-		halfScreenSize = Camera.main.orthographicSize * Camera.main.aspect;        
+		halfScreenSize = Camera.main.orthographicSize * Camera.main.aspect;  
     }
 
     public void Play()
     {
+		
 		sound.BtnPressed ();
         playBtn.gameObject.SetActive(false);
 		countDowntxt.gameObject.SetActive(true);
@@ -67,11 +70,44 @@ public class GameController : MonoBehaviour {
         }
     }
 
+
+
+
     void Update()
     {
+		GameDifficulty ();
         if (startGame && !countDownFinished)
             StartCountDown();
     }
+
+	void GameDifficulty()
+	{		
+		if (Time.time < 10 && difficulty == 0) {
+			difficulty = 1;
+			return;
+		}
+		else if (Time.time > 30 && Time.time < 60 && difficulty == 1){		
+			moveSpeed = moveSpeed*DifficultyIncreaseValue;
+			difficulty = 2;
+		}
+		else if (Time.time > 60 && Time.time < 100 && difficulty == 2){		
+			moveSpeed = moveSpeed*DifficultyIncreaseValue;
+			difficulty = 3;
+		}
+		else if (Time.time > 100 && Time.time < 150 && difficulty == 3){		
+			moveSpeed = moveSpeed*DifficultyIncreaseValue;
+			difficulty = 4;
+		}
+		else if (Time.time > 150 && Time.time < 300 && difficulty == 4 ){		
+			moveSpeed = moveSpeed*DifficultyIncreaseValue;
+			difficulty = 5;
+		}
+		else if (Time.time > 300 && Time.time < 500 && difficulty == 5){		
+			moveSpeed = moveSpeed*DifficultyIncreaseValue;
+			difficulty = 6;
+		}
+
+	}
 
 	public void GameisOver()
 	{

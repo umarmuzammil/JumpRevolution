@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
 
 	SoundController soundController;
 	GameController gameController;
+	CameraController cameraController;
+	SpawnBlocks spawnController;
     [Range(0.1f,1)]
     public float jumpspeed = 0.3f;
 
@@ -35,11 +37,11 @@ public class PlayerController : MonoBehaviour
 		
 		previousBlock = activeBlock = GameObject.FindGameObjectWithTag ("cube");
 
-
         //Game Events
 		soundController = FindObjectOfType<SoundController>();
 		gameController = FindObjectOfType<GameController>();
-
+		spawnController = FindObjectOfType<SpawnBlocks> ();
+		cameraController = FindObjectOfType<CameraController>();
 
         GameController.gameStarted += GameStarted;
         GameController.gamePaused += Pause;
@@ -74,21 +76,24 @@ public class PlayerController : MonoBehaviour
             {
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 100))
+				if (Physics.Raycast(ray, out hit, 100, 1<<LayerMask.NameToLayer("Blocks")))
                 {
-                    if (hit.collider.tag == "cube")
-                    {
-						previousBlock = activeBlock;
+                   		previousBlock = activeBlock;
                         activeBlock = hit.transform.gameObject;	
 
 						if (!(activeBlock == previousBlock)) {
+
+						if (activeBlock.GetComponent<MeshRenderer>().material.color == spawnController.clickableColor) {
+
 							charAnimator.SetFloat ("jump", 1f);
 							Vector3 newPos = new Vector3 (activeBlock.transform.position.x - (gameController.moveSpeed * jumpspeed), hit.point.y + 0.1f, 0);
 							soundController.Jumped ();
 							transform.DOJump (newPos, 1f, 1, jumpspeed, false).SetEase (Ease.InOutQuint).OnComplete (Arrived);
-						}
+							cameraController.TweenCamera ();
+						} else
+							print ("Not Jumpable");
+					}
 
-                    }
                 }
             }
         }

@@ -17,9 +17,14 @@ public class SpawnBlocks : MonoBehaviour {
 	GameObject baseBlock;
 	List<GameObject> spawedBlocks = new List<GameObject>();
 
-
+	Vector3 cameraInitialPos;
+	Vector3 cameraPreviousPos;
 	public Material blockMaterial;
-    
+
+	int colorindex = 0;
+	[Header("Block Properties")]
+	public Color clickableColor;
+
 
 	void GameStarted()
 	{
@@ -35,12 +40,13 @@ public class SpawnBlocks : MonoBehaviour {
 
     void Start()
     {
-		
-		baseBlock = Instantiate (baseBlockPrefab, transform);
+		cameraPreviousPos = Camera.main.transform.position;
+
+		Reset ();
 		GameController.gameStarted += GameStarted;
         GameController.gamePaused += Pause;
-		GameController.reset += Reset;
-
+		GameController.reset += Reset;	
+	
     }
 
 	void Reset()
@@ -50,6 +56,7 @@ public class SpawnBlocks : MonoBehaviour {
 				Destroy (spawedBlocks [i]);
 		}
 		spawedBlocks.Add(baseBlock = Instantiate (baseBlockPrefab, transform));
+		baseBlock.layer = LayerMask.NameToLayer ("Blocks");
 		time = 0;
 	}
 
@@ -73,7 +80,14 @@ public class SpawnBlocks : MonoBehaviour {
     }
     void InstantiateBlocks()
     {
-        //Position Parameters
+		
+		Vector3 cameraOffset = Vector3.zero;
+
+		if (Camera.main.transform.position != cameraPreviousPos) {			
+			cameraOffset = Camera.main.transform.position - cameraPreviousPos;
+			cameraPreviousPos = Camera.main.transform.position;
+		}
+		//Position Parameters
         float minPosY = 0;
         float maxPosY = 2.5f;
 
@@ -82,25 +96,35 @@ public class SpawnBlocks : MonoBehaviour {
 		float minScaleX = 1f;
 		float maxScaleX = 3f;
 
-		//float minScaleZ = 0.5f;
-		//float maxScaleZ = 1f;
-
-
 		float posY = Random.Range(minPosY, maxPosY);
         float scaleX = Random.Range(minScaleX, maxScaleX);
-       // float scaleZ = Random.Range(minScaleZ, maxScaleZ);
 
 
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		cube.transform.position = new Vector3(GameController.halfScreenSize+3.5f+(scaleX/2+2f), posY, 0);
+		cube.transform.position = new Vector3(GameController.halfScreenSize+3.5f+(scaleX/2+2f), posY + cameraOffset.y, 0);
         cube.transform.localScale = new Vector3(scaleX, 0.5f, 1);
 
-		Color blockcolor = new Color (Random.value, Random.value, Random.value, 1f);
+		Color blockcolor;
+		if (colorindex == 0 || colorindex == 2 ) {
+			 blockcolor = clickableColor;
 
+
+		}
+		else {
+			 
+			blockcolor = new Color (Random.value, Random.value, Random.value, 1f);
+		}
+		colorindex = colorindex + 1;
+
+		if (colorindex > 3)
+			colorindex = 0;
+
+
+		cube.tag = "cube";
+		cube.layer = LayerMask.NameToLayer("Blocks");
 		cube.GetComponent<MeshRenderer> ().material.color = blockcolor;
         cube.transform.SetParent(transform);
 		cube.AddComponent<MoveBlocks>();
-        cube.tag = "cube";
 		spawedBlocks.Add (cube);
     }
  
